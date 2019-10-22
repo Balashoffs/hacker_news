@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import '../blocs/stories_provider.dart';
 
 class NewsList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     final bloc = StoriesProvider.of(context);
+
+    // THIS IS BAD!!!!! DONT DO THIS!
+    // TEMPORARY!
+    bloc.fetchTopIds();
 
     return Scaffold(
       appBar: AppBar(
@@ -19,7 +22,11 @@ class NewsList extends StatelessWidget {
       stream: bloc.topIds,
       builder: (context, AsyncSnapshot<List<int>> snapshot){
         if(!snapshot.hasData){
-          return Text('Still wating on Ids');
+          return Center(
+            child: CircularProgressIndicator(
+
+            ),
+          );
         }
         return ListView.builder(
           itemCount: snapshot.data.length,

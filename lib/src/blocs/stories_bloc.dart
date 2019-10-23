@@ -3,8 +3,8 @@ import '../models/item_model.dart';
 import '../resources/repository.dart';
 
 class StoriesBloc{
-  final _topIds = PublishSubject<List<int>>();
   final _repository = Repository();
+  final _topIds = PublishSubject<List<int>>();
 
   Observable<List<int>> get topIds => _topIds.stream;
 

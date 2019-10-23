@@ -16,7 +16,7 @@ class ItemModel{
   final List<dynamic> kids;
 
   ItemModel.fromJson(Map<String, dynamic> parsedJson)
-    : id = parsedJson[''],
+    : id = parsedJson['id'],
       deleted = parsedJson['deleted'],
       type = parsedJson['type'],
       by = parsedJson['by'],
@@ -31,7 +31,7 @@ class ItemModel{
       kids = parsedJson['kids'];
 
   ItemModel.fromDb(Map<String, dynamic> parsedJson)
-      : id = parsedJson[''],
+      : id = parsedJson['id'],
         deleted = parsedJson['deleted'] == 1,
         type = parsedJson['type'],
         by = parsedJson['by'],

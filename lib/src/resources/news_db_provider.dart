@@ -15,7 +15,7 @@ class NewsDBProvider implements Source, Cache{
 
   void init()async{
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, "item.db");
+    final path = join(documentsDirectory.path, "item4.db");
     db = await openDatabase(
       path,
       version: 1,
@@ -30,13 +30,14 @@ class NewsDBProvider implements Source, Cache{
                 text TEXT,
                 parent INTEGER,
                 kids BLOB,
-                dead INTEGER, 
+                dead INTEGER,
+                deleted INTEGER, 
                 url TEXT,
                 score INTEGER,
                 title STRING,
                 descendants INTEGER
               )
-            """);
+        """);
       },
     );
   }
@@ -45,19 +46,23 @@ class NewsDBProvider implements Source, Cache{
     final maps = await db.query(
       "Items",
       columns: null,
-      where: "id=?",
+      where: "id = ?",
       whereArgs: [id],
     );
 
     if(maps.length>0){
       return ItemModel.fromDb(maps.first);
     }
-    return null;
 
+    return null;
   }
 
   Future<int> addItem(ItemModel item){
-    return db.insert("Items", item.toMap());
+    return db.insert(
+      "Items",
+      item.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
   }
 
   @override

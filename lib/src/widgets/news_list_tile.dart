@@ -1,36 +1,53 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hacker_news/src/widgets/loading_container.dart';
 import '../models/item_model.dart';
 import '../blocs/stories_provider.dart';
-import 'dart:async';
 
-class NewsListTile extends StatelessWidget{
-
+class NewsListTile extends StatelessWidget {
   final int itemId;
 
-  NewsListTile(this.itemId);
+  NewsListTile({this.itemId});
 
-  @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     final bloc = StoriesProvider.of(context);
+
     return StreamBuilder(
       stream: bloc.items,
-      builder: (context, AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot){
-        if(!snapshot.hasData){
-          return Text('Stream still loading');
+      builder: (context, AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) {
+        if (!snapshot.hasData) {
+          return LoadingContainer();
         }
 
         return FutureBuilder(
           future: snapshot.data[itemId],
-          builder: (context, AsyncSnapshot<ItemModel> itemSnapshop){
-            if(!itemSnapshop.hasData){
-              return Text('Still loading item $itemId');
+          builder: (context, AsyncSnapshot<ItemModel> itemSnapshot) {
+            if(!itemSnapshot.hasData){
+              return LoadingContainer();
             }
 
-            return Text(itemSnapshop.data.title);
+            return buildTile(itemSnapshot.data);
           },
         );
       },
     );
   }
 
+  Widget buildTile(ItemModel item){
+    return Column(
+      children: <Widget>[
+        ListTile(
+          title: Text(item.title),
+          subtitle: Text('${item.score} points'),
+          trailing: Column(
+            children: <Widget>[
+              Icon(Icons.comment),
+              Text('${item.descendants}'),
+            ],
+          ),
+        ),
+        Divider(),
+      ],
+    );
+  }
 }

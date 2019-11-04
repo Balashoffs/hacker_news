@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:hacker_news/src/widgets/loading_container.dart';
 import '../models/item_model.dart';
@@ -26,17 +27,20 @@ class NewsListTile extends StatelessWidget {
               return LoadingContainer();
             }
 
-            return buildTile(itemSnapshot.data);
+            return buildTile(context, itemSnapshot.data);
           },
         );
       },
     );
   }
 
-  Widget buildTile(ItemModel item){
+  Widget buildTile(BuildContext context, ItemModel item){
     return Column(
       children: <Widget>[
         ListTile(
+          onTap: (){
+            Navigator.pushNamed(context, '/${item.id}');
+          },
           title: Text(item.title),
           subtitle: Text('${item.score} points'),
           trailing: Column(

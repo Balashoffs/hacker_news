@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:hacker_news/src/widgets/loading_container.dart';
 import '../models/item_model.dart';
